@@ -1,56 +1,49 @@
 <script>
-  import { onMount } from "svelte";
-  export let date;
+  import { onMount } from 'svelte'
+
+  export let loading = false
+  export let records = []
+
+  async function fetchRecords() {
+    if (loading) {
+      return
+    } else {
+      loading = true
+    }
+
+    const offset = records.length
+    const res = await fetch('/api/display' + (offset ? `?offset=${offset}` : ''));
+    records = [...records, ...await res.json()]
+    loading = false
+  }
 
   onMount(async () => {
-    const res = await fetch("/api/date");
-    const newDate = await res.text();
-    date = newDate;
+    await fetchRecords({ offset: records.length })
   });
-
-  let testData = null;
-  async function uploadData() {
-    const res = await fetch('/api/test', { body: JSON.stringify({ test: 1 }), method: 'POST' });
-    testData = await res.text();
-  }
 </script>
 
 <main>
-  <button on:click={uploadData}>test</button>
-  <p>{testData}</p>
-  <h1>Svelte + Node.js API</h1>
-  <h2>
-    Deployed with
-    <a href="https://vercel.com/docs" target="_blank" rel="noreferrer noopener">
-      Vercel
-    </a>
-    !
-  </h2>
-  <p>
-    <a
-      href="https://github.com/vercel/vercel/tree/master/examples/svelte"
-      target="_blank"
-      rel="noreferrer noopener">
-      This project
-    </a>
-    is a
-    <a href="https://svelte.dev/">Svelte</a>
-    app with three directories,
-    <code>/public</code>
-    for static assets,
-    <code>/src</code>
-    for components and content, and
-    <code>/api</code>
-    which contains a serverless
-    <a href="https://nodejs.org/en/">Node.js</a>
-    function. See
-    <a href="/api/date">
-      <code>api/date</code>
-      for the Date API with Node.js
-    </a>
-    .
-  </p>
-  <br />
-  <h2>The date according to Node.js is:</h2>
-  <p>{date ? date : 'Loading date...'}</p>
+  <h1>Webpack benchmark!</h1>
+  <table>
+    <thead>
+      <th>User</th>
+      <th>Platform</th>
+      <th>CPU</th>
+      <th>Memory</th>
+      <th>Bundle size (KB)</th>
+      <th>Time cost (ms)</th>
+    </thead>
+    <tbody>
+      {#each records as record}
+      <tr>
+        <td>{record.userInfo.username}</td>
+        <td>{record.userInfo.platform}</td>
+        <td>{record.platformInfo.cpu}</td>
+        <td>{record.platformInfo.memory}</td>
+        <td>{record.buildInfo.bundleSize}</td>
+        <td>{record.buildInfo.buildTime}</td>
+      </tr>
+    {/each}
+    </tbody>
+  </table>
 </main>
