@@ -7,9 +7,17 @@
     const newDate = await res.text();
     date = newDate;
   });
+
+  let testData = null;
+  async function uploadData() {
+    const res = await fetch('/api/test', { body: JSON.stringify({ test: 1 }), method: 'POST' });
+    testData = await res.text();
+  }
 </script>
 
 <main>
+  <button on:click={uploadData}>test</button>
+  <p>{testData}</p>
   <h1>Svelte + Node.js API</h1>
   <h2>
     Deployed with
