@@ -1,21 +1,8 @@
-import { NowRequest, NowResponse } from '@vercel/node'
 import url from 'url'
+import { NowRequest, NowResponse } from '@vercel/node'
 import { MongoClient } from 'mongodb'
 
-type UserInfo = {
-  username: string,
-}
-
-type PlatformInfo = {
-  platform: string,
-  cpu: string,
-  memory: number,
-}
-
-type BuildInfo = {
-  bundleSize: number,
-  buildTime: number,
-}
+import { UserInfo, PlatformInfo, BuildInfo } from '../types/data'
 
 let cachedDb = null
 

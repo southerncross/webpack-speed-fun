@@ -1,20 +1,7 @@
 import url from 'url'
 import { MongoClient } from 'mongodb'
 
-type UserInfo = {
-  username: string,
-}
-
-type PlatformInfo = {
-  platform: string,
-  cpu: string,
-  memory: number,
-}
-
-type BuildInfo = {
-  bundleSize: number,
-  buildTime: number,
-}
+import { UserInfo, PlatformInfo, BuildInfo } from '../types/data'
 
 let cachedDb = null
 
@@ -32,7 +19,6 @@ async function connectToDatabase(uri) {
 }
 
 module.exports = async (req, res) => {
-  console.log('boring >>>>', req.body)
   const db = await connectToDatabase(process.env.MONGODB_URI)
   const body = JSON.parse(req.body)
   const userInfo: UserInfo = body.userInfo
@@ -46,8 +32,6 @@ module.exports = async (req, res) => {
     buildInfo,
     created_at: Date.now(),
   })
-
-  const users = await collection.find({}).toArray()
 
   res.status(200).json()
 }

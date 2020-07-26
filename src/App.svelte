@@ -30,6 +30,7 @@
       <th>Platform</th>
       <th>CPU</th>
       <th>Memory</th>
+      <th>Working Directory</th>
       <th>Bundle size (KB)</th>
       <th>Time cost (ms)</th>
     </thead>
@@ -37,9 +38,10 @@
       {#each records as record}
       <tr>
         <td>{record.userInfo.username}</td>
-        <td>{record.userInfo.platform}</td>
+        <td>{record.platformInfo.platform}</td>
         <td>{record.platformInfo.cpu}</td>
         <td>{record.platformInfo.memory}</td>
+        <td>{record.platformInfo.workingDir}</td>
         <td>{record.buildInfo.bundleSize}</td>
         <td>{record.buildInfo.buildTime}</td>
       </tr>
