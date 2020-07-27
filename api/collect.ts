@@ -19,6 +19,7 @@ async function connectToDatabase(uri) {
 }
 
 module.exports = async (req, res) => {
+  console.log('req.body', req.body)
   const db = await connectToDatabase(process.env.MONGODB_URI)
   const body = JSON.parse(req.body)
   const userInfo: UserInfo = body.userInfo
