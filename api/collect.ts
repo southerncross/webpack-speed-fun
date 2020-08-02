@@ -20,19 +20,24 @@ async function connectToDatabase(uri) {
 
 module.exports = async (req, res) => {
   console.log('req.body', req.body)
-  const db = await connectToDatabase(process.env.MONGODB_URI)
-  const body = JSON.parse(req.body)
-  const userInfo: UserInfo = body.userInfo
-  const platformInfo: PlatformInfo = body.platformInfo
-  const buildInfo: BuildInfo = body.buildInfo
+  try {
+    const db = await connectToDatabase(process.env.MONGODB_URI)
+    const body = req.body
+    const userInfo: UserInfo = body.userInfo
+    const platformInfo: PlatformInfo = body.platformInfo
+    const buildInfo: BuildInfo = body.buildInfo
 
-  const collection = await db.collection('records')
-  await collection.insertOne({
-    userInfo,
-    platformInfo,
-    buildInfo,
-    created_at: Date.now(),
-  })
+    const collection = await db.collection('records')
+    await collection.insertOne({
+      userInfo,
+      platformInfo,
+      buildInfo,
+      created_at: Date.now(),
+    });
 
-  res.status(200).json()
+    res.status(200).json();
+  } catch (e) {
+    console.log(e);
+    res.status(500).json();
+  }
 }
